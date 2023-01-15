@@ -1,15 +1,20 @@
 import { Peer, Port, SecurityGroup, Vpc } from "aws-cdk-lib/aws-ec2";
 import { Construct } from "constructs";
 
-export const createSg = (scope: Construct, appName: string, vpc: Vpc) => {
+export const createSg = (
+  scope: Construct, namePrefix: string, vpc: Vpc,
+  description = "Allow ssh",
+  allowIngressPort = 22,
+  allowAllOutbound = true
+  ) => {
   const sg = new SecurityGroup(scope, "SecurityGroup", {
     vpc,
-    description: "Allow ssh",
-    allowAllOutbound: true,
-    securityGroupName: `${appName}_sg`,
+    description,
+    allowAllOutbound,
+    securityGroupName: `${namePrefix}_sg`,
   });
 
-  sg.addIngressRule(Peer.anyIpv4(), Port.tcp(22), "Allow ssh access");
+  sg.addIngressRule(Peer.anyIpv4(), Port.tcp(allowIngressPort), description);
   
   return sg;
 };

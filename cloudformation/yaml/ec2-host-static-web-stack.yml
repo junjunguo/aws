@@ -1,0 +1,226 @@
+Resources:
+  VPCB9E5F0B4:
+    Type: AWS::EC2::VPC
+    Properties:
+      CidrBlock: 10.0.0.0/16
+      EnableDnsHostnames: true
+      EnableDnsSupport: true
+      InstanceTenancy: default
+      Tags:
+        - Key: Name
+          Value: poemcn.github.io_vpc
+    Metadata:
+      aws:cdk:path: Ec2HostStaticWebStack/VPC/Resource
+  VPCpoemcngithubiovpcSubnet1Subnet0856FFD9:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId:
+        Ref: VPCB9E5F0B4
+      AvailabilityZone:
+        Fn::Select:
+          - 0
+          - Fn::GetAZs: ""
+      CidrBlock: 10.0.0.0/24
+      MapPublicIpOnLaunch: true
+      Tags:
+        - Key: aws-cdk:subnet-name
+          Value: poemcn.github.io_vpc
+        - Key: aws-cdk:subnet-type
+          Value: Public
+        - Key: Name
+          Value: Ec2HostStaticWebStack/VPC/poemcn.github.io_vpcSubnet1
+    Metadata:
+      aws:cdk:path: Ec2HostStaticWebStack/VPC/poemcn.github.io_vpcSubnet1/Subnet
+  VPCpoemcngithubiovpcSubnet1RouteTableA636EB94:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId:
+        Ref: VPCB9E5F0B4
+      Tags:
+        - Key: Name
+          Value: Ec2HostStaticWebStack/VPC/poemcn.github.io_vpcSubnet1
+    Metadata:
+      aws:cdk:path: Ec2HostStaticWebStack/VPC/poemcn.github.io_vpcSubnet1/RouteTable
+  VPCpoemcngithubiovpcSubnet1RouteTableAssociation96872AFE:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId:
+        Ref: VPCpoemcngithubiovpcSubnet1RouteTableA636EB94
+      SubnetId:
+        Ref: VPCpoemcngithubiovpcSubnet1Subnet0856FFD9
+    Metadata:
+      aws:cdk:path: Ec2HostStaticWebStack/VPC/poemcn.github.io_vpcSubnet1/RouteTableAssociation
+  VPCpoemcngithubiovpcSubnet1DefaultRoute6E53D52E:
+    Type: AWS::EC2::Route
+    Properties:
+      RouteTableId:
+        Ref: VPCpoemcngithubiovpcSubnet1RouteTableA636EB94
+      DestinationCidrBlock: 0.0.0.0/0
+      GatewayId:
+        Ref: VPCIGWB7E252D3
+    DependsOn:
+      - VPCVPCGW99B986DC
+    Metadata:
+      aws:cdk:path: Ec2HostStaticWebStack/VPC/poemcn.github.io_vpcSubnet1/DefaultRoute
+  VPCpoemcngithubiovpcSubnet2Subnet3251A20D:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId:
+        Ref: VPCB9E5F0B4
+      AvailabilityZone:
+        Fn::Select:
+          - 1
+          - Fn::GetAZs: ""
+      CidrBlock: 10.0.1.0/24
+      MapPublicIpOnLaunch: true
+      Tags:
+        - Key: aws-cdk:subnet-name
+          Value: poemcn.github.io_vpc
+        - Key: aws-cdk:subnet-type
+          Value: Public
+        - Key: Name
+          Value: Ec2HostStaticWebStack/VPC/poemcn.github.io_vpcSubnet2
+    Metadata:
+      aws:cdk:path: Ec2HostStaticWebStack/VPC/poemcn.github.io_vpcSubnet2/Subnet
+  VPCpoemcngithubiovpcSubnet2RouteTable8F8E4C86:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId:
+        Ref: VPCB9E5F0B4
+      Tags:
+        - Key: Name
+          Value: Ec2HostStaticWebStack/VPC/poemcn.github.io_vpcSubnet2
+    Metadata:
+      aws:cdk:path: Ec2HostStaticWebStack/VPC/poemcn.github.io_vpcSubnet2/RouteTable
+  VPCpoemcngithubiovpcSubnet2RouteTableAssociation9D8F25D5:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId:
+        Ref: VPCpoemcngithubiovpcSubnet2RouteTable8F8E4C86
+      SubnetId:
+        Ref: VPCpoemcngithubiovpcSubnet2Subnet3251A20D
+    Metadata:
+      aws:cdk:path: Ec2HostStaticWebStack/VPC/poemcn.github.io_vpcSubnet2/RouteTableAssociation
+  VPCpoemcngithubiovpcSubnet2DefaultRouteEB8CDA50:
+    Type: AWS::EC2::Route
+    Properties:
+      RouteTableId:
+        Ref: VPCpoemcngithubiovpcSubnet2RouteTable8F8E4C86
+      DestinationCidrBlock: 0.0.0.0/0
+      GatewayId:
+        Ref: VPCIGWB7E252D3
+    DependsOn:
+      - VPCVPCGW99B986DC
+    Metadata:
+      aws:cdk:path: Ec2HostStaticWebStack/VPC/poemcn.github.io_vpcSubnet2/DefaultRoute
+  VPCIGWB7E252D3:
+    Type: AWS::EC2::InternetGateway
+    Properties:
+      Tags:
+        - Key: Name
+          Value: poemcn.github.io_vpc
+    Metadata:
+      aws:cdk:path: Ec2HostStaticWebStack/VPC/IGW
+  VPCVPCGW99B986DC:
+    Type: AWS::EC2::VPCGatewayAttachment
+    Properties:
+      VpcId:
+        Ref: VPCB9E5F0B4
+      InternetGatewayId:
+        Ref: VPCIGWB7E252D3
+    Metadata:
+      aws:cdk:path: Ec2HostStaticWebStack/VPC/VPCGW
+  SecurityGroupDD263621:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Allow http
+      GroupName: poemcn.github.io_http_sg
+      SecurityGroupEgress:
+        - CidrIp: 0.0.0.0/0
+          Description: Allow all outbound traffic by default
+          IpProtocol: "-1"
+      SecurityGroupIngress:
+        - CidrIp: 0.0.0.0/0
+          Description: Allow http
+          FromPort: 80
+          IpProtocol: tcp
+          ToPort: 80
+        - CidrIp: 0.0.0.0/0
+          Description: from 0.0.0.0/0:443
+          FromPort: 443
+          IpProtocol: tcp
+          ToPort: 443
+      VpcId:
+        Ref: VPCB9E5F0B4
+    Metadata:
+      aws:cdk:path: Ec2HostStaticWebStack/SecurityGroup/Resource
+  InstanceInstanceRoleE9785DE5:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+          - Action: sts:AssumeRole
+            Effect: Allow
+            Principal:
+              Service: ec2.amazonaws.com
+        Version: "2012-10-17"
+      Tags:
+        - Key: Name
+          Value: poemcn.github.io_ec2
+    Metadata:
+      aws:cdk:path: Ec2HostStaticWebStack/Instance/InstanceRole/Resource
+  InstanceInstanceProfileAB5AEF02:
+    Type: AWS::IAM::InstanceProfile
+    Properties:
+      Roles:
+        - Ref: InstanceInstanceRoleE9785DE5
+    Metadata:
+      aws:cdk:path: Ec2HostStaticWebStack/Instance/InstanceProfile
+  InstanceC1063A87:
+    Type: AWS::EC2::Instance
+    Properties:
+      AvailabilityZone:
+        Fn::Select:
+          - 0
+          - Fn::GetAZs: ""
+      IamInstanceProfile:
+        Ref: InstanceInstanceProfileAB5AEF02
+      ImageId:
+        Ref: SsmParameterValueawsserviceamiamazonlinuxlatestamzn2amihvmx8664gp2C96584B6F00A464EAD1953AFF4B05118Parameter
+      InstanceType: t3.micro
+      SecurityGroupIds:
+        - Fn::GetAtt:
+            - SecurityGroupDD263621
+            - GroupId
+      SubnetId:
+        Ref: VPCpoemcngithubiovpcSubnet1Subnet0856FFD9
+      Tags:
+        - Key: Name
+          Value: poemcn.github.io_ec2
+      UserData:
+        Fn::Base64: |
+          #!/bin/bash
+
+          sudo yum update -y
+          sudo yum install -y httpd.x86_64
+          sudo systemctl start httpd.service
+          sudo systemctl enable httpd.service
+          wget https://github.com/poemcn/poemcn.github.io/archive/refs/heads/main.zip
+          sudo rm -rf /var/www/html/*
+          unzip main.zip -d /var/www/html/
+          sudo cp -r /var/www/html/poemcn.github.io-main/* /var/www/html/
+          sudo rm -r poemcn.github.io-main
+    DependsOn:
+      - InstanceInstanceRoleE9785DE5
+    Metadata:
+      aws:cdk:path: Ec2HostStaticWebStack/Instance/Resource
+  CDKMetadata:
+    Type: AWS::CDK::Metadata
+    Properties:
+      Analytics: v2:deflate64:H4sIAAAAAAAA/1WOza6CQAyFn8X9UIXFjVvjwrgjcOPWlLHGKnTMTEdjCO8uCkpc9fTrzzkZ/C1gMcN7SOzhktRcQVsq2ovp0b4lm0G7u1qzPsouX5s8VjXbMlZC+mKTKlxU+seqpolPbBWCs4zKTr7LL7EVJd9vblDpjo/RZuxW2gc5NSRqSrLRsz423sXr2+AHbCUoih1fDrozjA20hRsSfepnnHt35Jq6zhQUXPTDcY4eG+ozvU/GQWfEHQjOYX5Ll5BmkM7OgTnxUZQbgmKoT8BOjhpLAQAA
+    Metadata:
+      aws:cdk:path: Ec2HostStaticWebStack/CDKMetadata/Default
+Parameters:
+  SsmParameterValueawsserviceamiamazonlinuxlatestamzn2amihvmx8664gp2C96584B6F00A464EAD1953AFF4B05118Parameter:
+    Type: AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>
+    Default: /aws/service/ami-amazon-linux-latest/amzn2-ami-hvm-x86_64-gp2
